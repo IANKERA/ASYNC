@@ -22,12 +22,19 @@ const renderCountry = function (data) {
 
 const getCountryData = function (country) {
   fetch(`https://countries-api-836d.onrender.com/countries/name/${country}`)
-    .then(response => {
-      return response.json();
-    })
+    .then(response => response.json())
     .then(data => {
       renderCountry(data[0]);
-    });
+      const neighbour = data[0].borders?.[0];
+
+      if (!neighbour) return;
+
+      return fetch(
+        `https://countries-api-836d.onrender.com/countries/alpha/${neighbour}`
+      );
+    })
+    .then(response => response.json())
+    .then(data => renderCountry(data, 'neighbour'));
 };
 
-getCountryData('portugal');
+getCountryData('france');
