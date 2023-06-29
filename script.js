@@ -34,7 +34,13 @@ const getCountryData = function (country) {
       );
     })
     .then(response => response.json())
-    .then(data => renderCountry(data, 'neighbour'));
-};
+    .then(data => renderCountry(data, 'neighbour'))
 
-getCountryData('france');
+  };
+  btn.addEventListener('click', function(){
+    getCountryData('greece')
+
+  })
+  
+  
+  
