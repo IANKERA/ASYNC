@@ -21,43 +21,51 @@ const renderCountry = function (data) {
 };
 
 
-const getPosition = function () {
-  return new Promise (function (resolve, reject){
+// const getPosition = function () {
+//   return new Promise (function (resolve, reject){
     
-    navigator.geolocation.getCurrentPosition(resolve, reject);
-  });
-};
+//     navigator.geolocation.getCurrentPosition(resolve, reject);
+//   });
+// };
 
-getPosition().then(pos => console.log(pos))
+// getPosition().then(pos => console.log(pos))
 
-const whereAmI = function () {
-  getPosition()
-  .then(pos => {
-      const { latitude: lat, longitude: lng } = pos.coords;
+// const whereAmI = function () {
+//   getPosition()
+//   .then(pos => {
+//       const { latitude: lat, longitude: lng } = pos.coords;
       
-      return fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
-    })
-    .then(res => {
-      if (!res.ok) throw new Error(`Problem with geocoding ${res.status}`);
-      return res.json();
-    })
-    .then(data => {
-      console.log(data);
-      console.log(`You are in ${data.city}, ${data.country}`);
+//       return fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
+//     })
+//     .then(res => {
+//       if (!res.ok) throw new Error(`Problem with geocoding ${res.status}`);
+//       return res.json();
+//     })
+//     .then(data => {
+//       console.log(data);
+//       console.log(`You are in ${data.city}, ${data.country}`);
       
-      return fetch(`https://restcountries.eu/rest/v2/name/${data.country}`);
-    })
-    .then(res => {
-      if (!res.ok) throw new Error(`Country not found (${res.status})`);
+//       return fetch(`https://restcountries.eu/rest/v2/name/${data.country}`);
+//     })
+//     .then(res => {
+//       if (!res.ok) throw new Error(`Country not found (${res.status})`);
       
-      return res.json();
-    })
-    .then(data => renderCountry(data[0]))
-    .catch(err => console.error(`${err.message} 💥`));
-};
+//       return res.json();
+//     })
+//     .then(data => renderCountry(data[0]))
+//     .catch(err => console.error(`${err.message} 💥`));
+// };
 
-btn.addEventListener('click' , whereAmI);
+// btn.addEventListener('click' , whereAmI);
 
+const whereAmI = async function(country){
+  const res = await fetch(`https://countries-api-836d.onrender.com/countries/name/${country}`)
+  const data = await res.json();
+  console.log(data);
+  renderCountry(data[0]);
+}
+whereAmI('portugal')
+console.log('first')
 
 
 
