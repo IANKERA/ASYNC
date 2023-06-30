@@ -50,7 +50,22 @@ const renderCountry = function (data) {
 // };
 // reverse(39.71454, 21.62164);
 
-console.log('test start');
-setTimeout(() => console.log('0 sec'), 0);
-Promise.resolve('resolved').then(res => console.log(res));
-console.log('Test end');
+// console.log('test start');
+// setTimeout(() => console.log('0 sec'), 0);
+// Promise.resolve('resolved').then(res => console.log(res));
+// console.log('Test end');
+
+
+const lotteryPromise = new Promise(function(resolve, reject){
+  console.log('lotery draw');
+  setTimeout(function(){
+    if (Math.random() >= 0.5){
+      resolve('You win');
+    }else {
+      reject(new Error('you lost'))
+    } 
+  },2000);
+
+});
+
+lotteryPromise.then(res=> console.log(res)).catch(err => console.error(err));
