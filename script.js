@@ -57,22 +57,26 @@ const getPosition = function () {
 };
 
 const whereAmI = async function (country) {
-  const pos = await getPosition();
-  const { latitude: lat, longitude: lng } = pos.coords;
+  try {
+    const pos = await getPosition();
+    const { latitude: lat, longitude: lng } = pos.coords;
 
-  const resGeo = await fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
+    const resGeo = await fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
 
-  const dataGeo = await resGeo.json();
-  console.log(dataGeo);
+    const dataGeo = await resGeo.json();
+    console.log(dataGeo);
 
-  const res = await fetch(
-    `https://countries-api-836d.onrender.com/countries/name/${country}`
-  );
-  const data = await res.json();
-  console.log(data);
-  renderCountry(data[0]);
+    const res = await fetch(
+      `https://countries-api-836d.onrender.com/countries/name/${dataGeo.country}`
+    );
+    const data = await res.json();
+    console.log(data);
+    renderCountry(data[0]);
+  } catch (err) {
+    console.error(`something is wrong ${err.message}`);
+  }
 };
-whereAmI('portugal');
+whereAmI();
 console.log('first');
 
 // const getCountryData = function (country) {
