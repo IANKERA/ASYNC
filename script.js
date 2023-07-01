@@ -20,21 +20,13 @@ const renderCountry = function (data) {
   countriesContainer.style.opacity = 1;
 };
 
-
-// const getPosition = function () {
-//   return new Promise (function (resolve, reject){
-    
-//     navigator.geolocation.getCurrentPosition(resolve, reject);
-//   });
-// };
-
 // getPosition().then(pos => console.log(pos))
 
 // const whereAmI = function () {
 //   getPosition()
 //   .then(pos => {
 //       const { latitude: lat, longitude: lng } = pos.coords;
-      
+
 //       return fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
 //     })
 //     .then(res => {
@@ -44,12 +36,12 @@ const renderCountry = function (data) {
 //     .then(data => {
 //       console.log(data);
 //       console.log(`You are in ${data.city}, ${data.country}`);
-      
+
 //       return fetch(`https://restcountries.eu/rest/v2/name/${data.country}`);
 //     })
 //     .then(res => {
 //       if (!res.ok) throw new Error(`Country not found (${res.status})`);
-      
+
 //       return res.json();
 //     })
 //     .then(data => renderCountry(data[0]))
@@ -58,19 +50,30 @@ const renderCountry = function (data) {
 
 // btn.addEventListener('click' , whereAmI);
 
-const whereAmI = async function(country){
-  const res = await fetch(`https://countries-api-836d.onrender.com/countries/name/${country}`)
+const getPosition = function () {
+  return new Promise(function (resolve, reject) {
+    navigator.geolocation.getCurrentPosition(resolve, reject);
+  });
+};
+
+const whereAmI = async function (country) {
+  const pos = await getPosition();
+  const { latitude: lat, longitude: lng } = pos.coords;
+
+  const resGeo = await fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
+
+  const dataGeo = await resGeo.json();
+  console.log(dataGeo);
+
+  const res = await fetch(
+    `https://countries-api-836d.onrender.com/countries/name/${country}`
+  );
   const data = await res.json();
   console.log(data);
   renderCountry(data[0]);
-}
-whereAmI('portugal')
-console.log('first')
-
-
-
-
-
+};
+whereAmI('portugal');
+console.log('first');
 
 // const getCountryData = function (country) {
 //   fetch(`https://countries-api-836d.onrender.com/countries/name/${country}`)
@@ -100,7 +103,7 @@ console.log('first')
 //     })
 //     .then(data =>{
 //         console.log(data)
-//         console.log(`You are ${data.city}, ${data.country}`) 
+//         console.log(`You are ${data.city}, ${data.country}`)
 //          return re.json();
 //        })
 // };
@@ -111,7 +114,6 @@ console.log('first')
 // Promise.resolve('resolved').then(res => console.log(res));
 // console.log('Test end');
 
-
 // const lotteryPromise = new Promise(function(resolve, reject){
 //   console.log('lotery draw');
 //   setTimeout(function(){
@@ -119,7 +121,7 @@ console.log('first')
 //       resolve('You win');
 //     }else {
 //       reject(new Error('you lost'))
-//     } 
+//     }
 //   },2000);
 
 // });
